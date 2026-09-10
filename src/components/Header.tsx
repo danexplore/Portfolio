@@ -1,71 +1,92 @@
+"use client"
+
+import { FileDown, Menu, X } from "lucide-react"
+import { GithubIcon } from "./BrandIcons"
+import Link from "next/link"
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { site } from "@/content/site"
 
 const navItems = [
-  { label: "Sobre Mim", id: "sobre" },
-  { label: "Skills", id: "skills" },
-  { label: "Experiência", id: "experiencia" },
-  { label: "Estudos de Caso", id: "casos" },
-  { label: "EcoTranscribe AI", id: "ecotranscribe" },
-  { label: "Projetos", id: "projetos" },
-  { label: "Contato", id: "contato-cta" },
+  { label: "Destaques", href: "/#destaques" },
+  { label: "Projetos", href: "/#projetos" },
+  { label: "Experiência", href: "/#experiencia" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Contato", href: "/#contato" },
 ]
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id)
-    element?.scrollIntoView({ behavior: "smooth" })
-    setIsMenuOpen(false)
-  }
+  const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 w-full z-50 border-b bg-white/80 backdrop-blur-sm shadow-sm">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold text-danube">Portfólio - Daniel Moreira Batista</h1>
-        </div>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-line/60 bg-bg/70 backdrop-blur-md">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
+        <Link href="/" className="font-mono text-sm font-semibold tracking-tight text-fg" onClick={() => setOpen(false)}>
+          <span className="text-accent">~/</span>
+          {site.githubHandle}
+        </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Seções">
           {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className="text-sm font-medium text-abbey hover:text-danube transition-colors"
-            >
+            <Link key={item.href} href={item.href} className="text-sm text-muted transition-colors hover:text-fg">
               {item.label}
-            </button>
+            </Link>
           ))}
         </nav>
 
-        {/* Mobile hamburger button */}
+        <div className="hidden items-center gap-3 md:flex">
+          <a
+            href={site.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            className="rounded-lg p-2 text-muted transition-colors hover:text-fg"
+          >
+            <GithubIcon className="h-5 w-5" />
+          </a>
+          <a
+            href={site.resumePath}
+            className="inline-flex items-center gap-2 rounded-lg border border-accent/50 px-3 py-1.5 text-sm font-medium text-accent transition-colors hover:bg-accent-soft"
+          >
+            <FileDown className="h-4 w-4" />
+            Currículo
+          </a>
+        </div>
+
         <button
-          className="md:hidden p-2 rounded-lg text-abbey hover:text-danube hover:bg-danube/10 transition-colors"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Abrir menu"
+          type="button"
+          className="rounded-lg p-2 text-muted hover:text-fg md:hidden"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
         >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Mobile dropdown nav */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-b border-gull/20 shadow-lg">
-          <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
+      {open ? (
+        <nav className="border-t border-line/60 bg-bg/95 md:hidden" aria-label="Seções">
+          <div className="mx-auto flex max-w-6xl flex-col px-5 py-3">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-left px-4 py-3 rounded-lg text-sm font-medium text-abbey hover:text-danube hover:bg-danube/10 transition-colors"
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-lg px-3 py-3 text-sm text-muted hover:bg-surface hover:text-fg"
+                onClick={() => setOpen(false)}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
-          </nav>
-        </div>
-      )}
+            <div className="mt-2 flex gap-3 px-3 pb-2">
+              <a href={site.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-muted">
+                <GithubIcon className="h-4 w-4" /> GitHub
+              </a>
+              <a href={site.resumePath} className="inline-flex items-center gap-2 text-sm text-accent">
+                <FileDown className="h-4 w-4" /> Currículo
+              </a>
+            </div>
+          </div>
+        </nav>
+      ) : null}
     </header>
   )
 }
