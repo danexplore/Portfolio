@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowUpRight } from "lucide-react"
 import { GithubIcon } from "@/components/BrandIcons"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -50,6 +50,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
   const { slug } = await params
   const project = getFeaturedProject(slug)
   if (!project) notFound()
+  const nextProject = featuredProjects[(featuredProjects.indexOf(project) + 1) % featuredProjects.length]
 
   const creativeWorkJsonLd = {
     "@context": "https://schema.org",
@@ -64,7 +65,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
   return (
     <>
       <Header />
-      <main className="flex-1 pt-16">
+      <main id="main-content" className="case-study flex-1 pt-16">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkJsonLd) }} />
         <article className="mx-auto w-full max-w-4xl px-5 py-16 sm:px-8 sm:py-24">
           <Reveal>
@@ -150,6 +151,10 @@ export default async function ProjectPage({ params }: { params: Params }) {
               </Block>
             ) : null}
           </div>
+          <Link href={`/projetos/${nextProject.slug}`} className="next-project">
+            <div><span>Continue explorando</span><strong>{nextProject.title}</strong></div>
+            <ArrowUpRight size={32} />
+          </Link>
         </article>
       </main>
       <Footer />

@@ -1,24 +1,23 @@
 import Image from "next/image"
+import { ArrowUpRight, MapPin } from "lucide-react"
 import { site } from "@/content/site"
-import { Reveal } from "./Reveal"
+import { InteractiveSurface } from "./InteractiveSurface"
 import { Section } from "./Section"
 
 export function About() {
   return (
-    <Section id="sobre" eyebrow="Sobre" title="Dados por trás, software na ponta.">
-      <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start">
-        <div className="space-y-5 text-base leading-relaxed text-muted sm:text-lg">
-          {site.about.map((paragraph, index) => (
-            <Reveal key={index} delay={index * 0.08}>
-              <p>{paragraph}</p>
-            </Reveal>
-          ))}
+    <Section id="sobre" eyebrow="Prazer, Daniel" title="Curiosidade como ponto de partida.">
+      <div className="about-layout">
+        <InteractiveSurface className="portrait-card">
+          <div className="portrait-image"><Image src="/images/profile-2026.jpg" alt={`Foto de ${site.name}`} fill sizes="(min-width: 900px) 370px, 85vw" className="object-cover" /></div>
+          <div className="portrait-caption"><span>{site.shortName}</span><span><MapPin size={13} />{site.location}</span></div>
+          <span className="portrait-corner" aria-hidden="true">&lt;dev /&gt;</span>
+        </InteractiveSurface>
+        <div className="about-copy">
+          <p className="about-lead">Minha matéria-prima são dados.<br />Meu jeito de construir é com código.</p>
+          {site.about.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          <div className="about-footnote"><span className="status-dot" /><span>Hoje, construindo na <strong>{site.company}</strong></span><a href={site.linkedin} target="_blank" rel="noreferrer" aria-label="Perfil no LinkedIn"><ArrowUpRight size={20} /></a></div>
         </div>
-        <Reveal delay={0.16} className="justify-self-center md:justify-self-end">
-          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-line shadow-[0_0_60px_-20px_rgba(34,211,238,0.5)] sm:h-48 sm:w-48">
-            <Image src="/images/profile-2026.jpg" alt={`Foto de ${site.name}`} fill sizes="192px" className="object-cover" priority />
-          </div>
-        </Reveal>
       </div>
     </Section>
   )

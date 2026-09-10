@@ -1,25 +1,13 @@
+import { Bot, Braces, Database, Layers3, Plug, Rocket } from "lucide-react"
 import { skillGroups } from "@/content/skills"
-import { Reveal } from "./Reveal"
 import { Section } from "./Section"
-import { Tag } from "./Tag"
 
+const icons = [Database, Braces, Layers3, Bot, Plug, Rocket]
 export function Skills() {
-  return (
-    <Section id="skills" eyebrow="Skills" title="Ferramentas que uso no dia a dia.">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {skillGroups.map((group, index) => (
-          <Reveal key={group.title} delay={(index % 3) * 0.06} className="h-full">
-            <div className="card h-full p-5">
-              <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-accent">{group.title}</h3>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {group.skills.map((skill) => (
-                  <Tag key={skill}>{skill}</Tag>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
-  )
+  return <Section id="skills" eyebrow="Meu repertório" title="A ferramenta certa para cada ideia.">
+    <div className="skills-grid">{skillGroups.map((group, index) => {
+      const Icon = icons[index]
+      return <div key={group.title} className="skill-group"><Icon size={24} strokeWidth={1.4} /><h3>{group.title}</h3><ul>{group.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></div>
+    })}</div>
+  </Section>
 }
